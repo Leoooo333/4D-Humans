@@ -47,14 +47,6 @@ class SingleDataset():
         self.smpl_paths += smpl_path_this_forlder
 
         self.valid_index += [True]*len(smpl_path_this_forlder)
-        os.makedirs(os.path.join(smpl_folder), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "images"), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "visualized_imgs"), exist_ok=True)
-        # os.makedirs(os.path.join(smpl_folder, folder.name, "mesh"), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "mask"), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "semantic_map"), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "depth"), exist_ok=True)
-        os.makedirs(os.path.join(smpl_folder, "smpl_results"), exist_ok=True)
         
         self.smpl_paths = [path for path, valid in zip(self.smpl_paths,self.valid_index) if valid]        
         self.output_paths = [self.out_folder for smpl_path in self.smpl_paths]
@@ -271,9 +263,6 @@ if __name__ == '__main__':
     # rendering_pipeline(HumansDataset(SMPL_FOLDER, OUT_FOLDER))
     import sys
     argv = sys.argv    
-    # parser.add_argument('--device', type=int, default=0, help='GPU device ID')
-    # parser.add_argument('--driving_path', type=str, default="driving_videos/001", help='Folder path to driving imgs sequence')
-    # parser.add_argument('--reference_path', type=str, default="reference_imgs/images/ref.png", help='Path to reference img')
     print(f'Rendering:') 
     try:
         argv.index("--device")
