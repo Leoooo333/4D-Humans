@@ -13,9 +13,6 @@ if 'PYOPENGL_PLATFORM' not in os.environ:
 from hmr2.models import HMR2, download_models, load_hmr2, DEFAULT_CHECKPOINT
 
 if __name__ == "__main__":
-    # Replace 'input_video_path' and 'output_video_path' with the actual paths to your video files
-    #input_video_path = 'input_video.mp4'
-    #output_video_path = '00337_transfer_test/output.mp4'
     parser = argparse.ArgumentParser(description='HMR2 demo code')
     parser.add_argument('--device', type=int, default=0, help='GPU device ID')
     parser.add_argument('--driving_path', type=str, default="driving_videos/001", help='Folder path to driving imgs sequence')
@@ -27,7 +24,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     os.makedirs(args.output_folder, exist_ok=True)
-    #reference_img = cv2.imread(str(args.reference_file_folder))
     have_smpl_results = False
     
     
@@ -47,7 +43,6 @@ if __name__ == "__main__":
     driving_folder = args.driving_path
     reference_file = args.reference_path
     
-    print(os.listdir(driving_folder))
     if "smpl_results" in os.listdir(driving_folder):
         have_smpl_results = True
         driving_paths = os.listdir(os.path.join(driving_folder, "smpl_results"))
@@ -62,8 +57,6 @@ if __name__ == "__main__":
         reference_path = Path(str(reference_file))
         reference_img = cv2.imread(os.path.join(reference_path.parent.parent, "images", reference_path.name.split(".")[0]+".png") )
         
-        #print(driving_folder)
-        #print(driving_paths)
         smooth_smpl_path = os.path.join(driving_folder, "smpl_results", "smpls_group.npz")
         if os.path.exists(smooth_smpl_path):
             result_dict_list = np.load(smooth_smpl_path, allow_pickle=True)

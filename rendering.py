@@ -120,27 +120,20 @@ def rendering_pipeline(dataset_totol, ref_img_path):
     result_dict = np.load(file_path_w_face_and_color, allow_pickle=True).item()
     faces = result_dict["faces"]
     verts_color = result_dict["verts_color"][:,::-1].astype(np.float32) / 255.
-    
-    # dataset_sections = np.array_split(np.arange(len(dataset_totol.smpl_paths)),int(len(dataset_totol.smpl_paths)/100)+1)
-    
+        
     result_dict_list = []
-    # smpl_paths_batch = [dataset_totol.smpl_paths[i] for i in section]
-    # out_paths_batch = [dataset_totol.output_paths[i] for i in section]
+
     with Pool(4) as p:
         processed = p.map(load_smpl, tqdm(dataset_totol.smpl_paths, total=len(dataset_totol.smpl_paths), desc ="Loading smpls into RAM"))
         
     for smpl in tqdm(processed, total=len(dataset_totol.smpl_paths), desc ="Loading smpls into RAM"):
         result_dict_list.append(smpl)
-    # for smpl_path, output_path in tqdm(zip(dataset_totol.smpl_paths, dataset_totol.output_paths), total=len(dataset_totol.smpl_paths), desc ="Loading smpls into RAM"):
-    #     result_dict = np.load(smpl_path, allow_pickle=True).item()
-    #     result_dict_list.append(result_dict)
     
     for smpl_path, output_path, result_dict in tqdm(zip(dataset_totol.smpl_paths, dataset_totol.output_paths, result_dict_list), total=len(dataset_totol.output_paths), desc ="Rendering Images", miniters=10):
         render_path = output_path
         smpl_fn, _ = os.path.splitext(os.path.basename(smpl_path))
         smpl_fn = smpl_fn.split(".")[0]
-        #bpy.ops.image.open(filepath="C:/Users/Leo/Desktop/smpl_rendering/454796.png", directory="C:\\Users\\Leo\\Desktop\\smpl_rendering\\",
-        #    files=[{"name":"ori_img.png", "name":"ori_img.png"}], show_multiview=False)
+
         ori_img = bpy.data.images.load(ref_img_path)
         ori_img.name = 'ori_img.png'
         ori_img.colorspace_settings.name="Raw"
@@ -149,7 +142,6 @@ def rendering_pipeline(dataset_totol, ref_img_path):
         cam_t = result_dict["cam_t"][0]
         verts = result_dict["verts"][0] + cam_t    
         img_size = result_dict["render_res"].astype(np.int32)
-        #img_size[1] += 200
         smpl_outs = result_dict["smpls"]
         camera.data.sensor_width = img_size.max()
         camera.data.lens = result_dict["scaled_focal_length"]
