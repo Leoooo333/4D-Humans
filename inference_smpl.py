@@ -245,4 +245,4 @@ if __name__ == "__main__":
                     "scaled_focal_length":scaled_focal_length.cpu().numpy()}
                 np.save(str(os.path.join(video_path, "smpl_results", f'{img_fn}.npy')),
                     results_dict_for_rendering)
-        np.savez(str(os.path.join(video_path, f'smpls_group.npz')), smpl=smpls, camera=cams)
+        np.savez(str(os.path.join(video_path, "smpl_results", f'smpls_group.npz')), smpl=smpls, camera=cams)
